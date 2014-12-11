@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>XLoader demo</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./../XLoader.js"></script>
+<style type="text/css">
+#container {
+	width:1000px;
+	margin:0 auto;
+	padding:10px 0;
+}
+h1 {
+	text-align:center;
+}
+</style>
+</head>
+<body>
+<div id="container">
+	<h1>XLoader demo</h1>
+	<div class="main">
+		<form action="upload.php" method="post">
+			<input id="file" type="file" name="images[]" multiple>
+			<div id="XLoaderContainer"></div>
+			<button type="submit">Upload</button>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$('#file').XLoader({
+	target : 'target.php',
+	container : '#XLoaderContainer',
+});
+</script>
+</body>
+</html>

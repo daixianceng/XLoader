@@ -10,18 +10,18 @@ XLoader
 1.引入jQuery
 2.创建表单：
 *****************************************************
-<form action="upload.php" method="post" enctype="multipart/form-data">
-  <input id="file" type="file" name="images[]" accept="image/*" multiple>
-  <button type="submit">Upload</button>
-</form>
+*<form action="upload.php" method="post" enctype="multipart/form-data">
+*  <input id="file" type="file" name="images[]" accept="image/*" multiple>
+*  <button type="submit">Upload</button>
+*</form>
 *****************************************************
 3.激活多图片上传功能：
 *****************************************************
-<script type="text/javascript">
-$('#file').XLoader({
-	target : 'target.php' // 多图片上传目标脚本（必须）
-});
-</script>
+*<script type="text/javascript">
+*$('#file').XLoader({
+*	target : 'target.php' // 多图片上传目标脚本（必须）
+*});
+*</script>
 *****************************************************
 
 参数说明

@@ -7,7 +7,7 @@ XLoader
 
 使用方式
 -------
-1.引入jQuery
+1.引入jQuery与XLoader.js
 
 2.创建表单：
 

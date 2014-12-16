@@ -32,12 +32,7 @@ XLoader
 * `container` : 图片列表容器，默认在图片选择按钮下面展示
 * `registerStyle` : 是否注册自带样式，默认注册
 * `tableOptions` : 表格属性设置，默认：{id : 'XLoaderTable'}
-* `columnOptions` : 表格列设置，您可以指定哪些列显示，目前支持5列：
-    1. number : 图片序号列
-    2. image : 图片列
-    3. name : 图片名列
-    4. size : 图片大小列
-    5. textarea : 图片描述列
+* `columnOptions` : 表格列设置，您可以指定哪些列显示，目前支持5列：number, image, name, size, textarea
 * `imageOptions` : 图片属性设置，默认：{}
 * `textareaOptions` : 输入框设置，默认：{name : 'descriptions[]'}
 * `hiddenFieldName` : 图片文件名隐藏域的名称，默认：'imageNames[]'

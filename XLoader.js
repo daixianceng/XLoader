@@ -42,6 +42,7 @@
 				name : 'descriptions[]'
 			};
 			var hiddenFieldName = 'imageNames[]';
+			var resourcesUrl = '';
 			
 			// Merge two object property, this function will modify the first object.
 			var objectMerge = function(obj1, obj2) {
@@ -89,6 +90,9 @@
 			if (typeof config.hiddenFieldName !== 'undefined') {
 				hiddenFieldName = config.hiddenFieldName;
 			}
+			if (typeof config.resourcesUrl !== 'undefined') {
+				resourcesUrl = config.resourcesUrl;
+			}
 			
 			if (registerStyle) {
 				$('body').append('<style type="text/css">#XLoaderTable{} #XLoaderTable .table-col-1{width:100px;} #XLoaderTable .table-col-2{width:200px;} #XLoaderTable img{max-width:200px;} #XLoaderTable td{text-align:center;} #XLoaderTable textarea{resize:none;width:180px;height:100px;padding:5px;}</style>');
@@ -134,6 +138,9 @@
 				$.extend({
 					XLoaderData : function(json) {
 						var list = $.parseJSON(json);
+						
+						if (!list || list.length === 0) return;
+						
 						if (!isRender) {
 							$container.append($table);
 							isRender = true;
@@ -168,15 +175,38 @@
 										for (var key in textareaOptions) {
 											$td.find('textarea').attr(key, textareaOptions[key]);
 										}
+										
+										if (list[i].description) {
+											$td.find('textarea').val(list[i].description);
+										}
+										
 										$tr.append($td);
 										break;
 								}
-								$table.find('tbody').append($tr);
 							}
+							
+							$table.find('tbody').append($tr);
 						}
 					}
 				});
-			})()
+			})();
+			
+			(function() {
+				if (resourcesUrl !== '') {
+					$.ajax({
+						url : resourcesUrl,
+						type : 'post',
+						timeout : 30000,
+						dataType : 'text',
+						success : function(data) {
+							$.XLoaderData(data);
+						},
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+							alert(textStatus);
+						}
+					});
+				}
+			})();
 		}
 	})
 })(jQuery)

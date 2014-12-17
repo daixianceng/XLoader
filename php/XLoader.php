@@ -32,7 +32,7 @@ class XLoader
 	/**
 	 * 接收的图片数据
 	 * 
-	 * @var unknown
+	 * @var array
 	 */
 	protected $_images = array();
 	

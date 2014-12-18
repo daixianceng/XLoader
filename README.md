@@ -36,3 +36,4 @@ XLoader
 * `imageOptions` : 图片属性设置，默认：{}
 * `textareaOptions` : 输入框设置，默认：{name : 'descriptions[]'}
 * `hiddenFieldName` : 图片文件名隐藏域的名称，默认：'imageNames[]'
+* `resourcesUrl` : 资源请求url，如果需要载入已有图片，请设置该参数，默认：''

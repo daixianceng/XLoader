@@ -1,5 +1,6 @@
 XLoader
 =======
+A simple jQuery multi-image upload plugin.
 
 简单的jQuery多图片上传插件
 

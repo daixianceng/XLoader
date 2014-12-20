@@ -95,7 +95,7 @@
 			}
 			
 			if (registerStyle) {
-				$('body').append('<style type="text/css">#XLoaderTable{} #XLoaderTable .table-col-1{width:100px;} #XLoaderTable .table-col-2{width:200px;} #XLoaderTable img{max-width:200px;} #XLoaderTable td{text-align:center;} #XLoaderTable textarea{resize:none;width:180px;height:100px;padding:5px;}</style>');
+				$('body').append('<style type="text/css">#XLoaderTable{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;background:#eee;border-spacing:1px}#XLoaderTable .table-col-1{width:100px}#XLoaderTable .table-col-2{width:200px}#XLoaderTable th{font-size:14px;font-weight:200;color:#ddd;background:#333;height:40px}#XLoaderTable img{max-width:180px}#XLoaderTable tr{background:#fff}#XLoaderTable td{text-align:center;padding:10px}#XLoaderTable textarea{resize:none;width:178px;height:100%;padding:5px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;border:1px dashed #ccc;outline:none}#XLoaderTable textarea:hover,#XLoaderTable textarea:focus{border-color:#333}</style>');
 			}
 			
 			// The hidden iframe and form.

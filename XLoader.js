@@ -35,6 +35,10 @@
 				textarea: {
 					text : 'Description',
 					class : 'table-col-2'
+				},
+				modify: {
+					text : 'Modify',
+					class : 'table-col-1'
 				}
 			};
 			var imageOptions = {};
@@ -53,6 +57,23 @@
 						obj1[key] = obj2[key];
 					}
 				}
+			};
+			
+			var imageDelete = function() {
+				var filename = $(this).attr('filename');
+				$.ajax({
+					url : target,
+					type : 'get',
+					data : 'filename=' + filename,
+					dataType : 'json',
+					success : function(json) {
+						
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(textStatus);
+					}
+				});
+				return false;
 			}
 			
 			if (typeof config.container !== 'undefined') {
@@ -180,6 +201,11 @@
 											$td.find('textarea').val(list[i].description);
 										}
 										
+										$tr.append($td);
+										break;
+									case 'modify' :
+										var $td = $('<td><a href="#" filename="' + list[i].name + '">Delete</a></td>');
+										$td.find('a').click(imageDelete);
 										$tr.append($td);
 										break;
 								}

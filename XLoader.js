@@ -45,6 +45,7 @@
 			var textareaOptions = {
 				name : 'descriptions[]'
 			};
+			var deleteLinkOptions = {};
 			var hiddenFieldName = 'imageNames[]';
 			var resourcesUrl = '';
 			
@@ -58,23 +59,6 @@
 					}
 				}
 			};
-			
-			var imageDelete = function() {
-				var filename = $(this).attr('filename');
-				$.ajax({
-					url : target,
-					type : 'get',
-					data : 'filename=' + filename,
-					dataType : 'json',
-					success : function(json) {
-						
-					},
-					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert(textStatus);
-					}
-				});
-				return false;
-			}
 			
 			if (typeof config.container !== 'undefined') {
 				$container = $(config.container);
@@ -107,6 +91,9 @@
 			}
 			if ($.isPlainObject(config.textareaOptions)) {
 				objectMerge(textareaOptions, config.textareaOptions);
+			}
+			if ($.isPlainObject(config.deleteLinkOptions)) {
+				objectMerge(deleteLinkOptions, config.deleteLinkOptions);
 			}
 			if (typeof config.hiddenFieldName !== 'undefined') {
 				hiddenFieldName = config.hiddenFieldName;
@@ -157,7 +144,7 @@
 				var isRender = false;
 				var imageCount = 0;
 				$.extend({
-					XLoaderData : function(json) {
+					XLoaderData : function(json, source) {
 						var list = $.parseJSON(json);
 						
 						if (!list || list.length === 0) return;
@@ -204,8 +191,47 @@
 										$tr.append($td);
 										break;
 									case 'modify' :
-										var $td = $('<td><a href="#" filename="' + list[i].name + '">Delete</a></td>');
-										$td.find('a').click(imageDelete);
+										var $td = $('<td><a href="#">Delete</a></td>');
+										for (var key in deleteLinkOptions) {
+											$td.find('a').attr(key, deleteLinkOptions[key]);
+										}
+										
+										(function() {
+											var $row = $tr;
+											var filename = list[i].name;
+											var url = '';
+											var loading = false;
+											
+											if (source === 'target') {
+												url = target;
+											} else if (source === 'resources') {
+												url = resourcesUrl;
+											}
+											
+											$td.find('a').click(function() {
+												if (loading) return false;
+												loading = true;
+												$.ajax({
+													url : url,
+													type : 'post',
+													data : {filename : filename, action : 'delete'},
+													dataType : 'json',
+													success : function(json) {
+														if (json.error === 'no') {
+															$row.remove();
+														}
+													},
+													error : function(XMLHttpRequest, textStatus, errorThrown) {
+														alert(textStatus);
+													},
+													complete : function(XMLHttpRequest, textStatus) {
+														loading = false;
+													}
+												});
+												return false;
+											});
+										})();
+										
 										$tr.append($td);
 										break;
 								}
@@ -223,9 +249,10 @@
 						url : resourcesUrl,
 						type : 'post',
 						timeout : 30000,
+						data : {action : 'load'},
 						dataType : 'text',
 						success : function(data) {
-							$.XLoaderData(data);
+							$.XLoaderData(data, 'resources');
 						},
 						error : function(XMLHttpRequest, textStatus, errorThrown) {
 							alert(textStatus);

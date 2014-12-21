@@ -4,6 +4,13 @@ require_once 'XLoader.php';
 class XLoaderResources
 {
 	/**
+	 * 动作类型
+	 * 
+	 * @var string
+	 */
+	protected $_action = 'load';
+	
+	/**
 	 * 图片路径
 	 * 
 	 * @var string
@@ -25,7 +32,11 @@ class XLoaderResources
 	protected $_images = array();
 	
 	public function __construct()
-	{}
+	{
+		if (isset($_POST['action'])) {
+			$this->_action = $_POST['action'];
+		}
+	}
 	
 	/**
 	 * 获取图片路径
@@ -115,10 +126,50 @@ class XLoaderResources
 	}
 	
 	/**
+	 * 执行动作
+	 */
+	public function run()
+	{
+		switch ($this->_action) {
+			case 'load' :
+				$this->_sendImages();
+				break;
+			case 'delete' :
+				$this->_delete();
+				break;
+			default :
+				break;
+		}
+	}
+	
+	/**
 	 * 发送图片数据到客户端
 	 */
-	public function send()
+	private function _sendImages()
 	{
 		echo json_encode($this->_images);
+	}
+	
+	/**
+	 * 删除图片
+	 * 
+	 * @return boolean
+	 */
+	private function _delete()
+	{
+		$filename = isset($_POST['filename']) ? $_POST['filename'] : null;
+	
+		if (empty($filename)) {
+			echo json_encode(array('error' => 'yes'));
+			return false;
+		}
+	
+		$filenameFull = $this->_path . DIRECTORY_SEPARATOR . $filename;
+		if (is_file($filenameFull)) {
+			@unlink($filenameFull);
+		}
+	
+		echo json_encode(array('error' => 'no'));
+		return true;
 	}
 }

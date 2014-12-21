@@ -2,6 +2,13 @@
 class XLoader
 {
 	/**
+	 * 动作类型
+	 * 
+	 * @var string
+	 */
+	protected $_action = 'receive';
+	
+	/**
 	 * 图片保存路径
 	 * 
 	 * @var string
@@ -29,24 +36,39 @@ class XLoader
 	 */
 	protected $_types = array('jpg', 'png', 'gif', 'bmp');
 	
-	/**
-	 * 接收的图片数据
-	 * 
-	 * @var array
-	 */
-	protected $_images = array();
-	
 	public function __construct()
-	{}
+	{
+		if (isset($_POST['action'])) {
+			$this->_action = $_POST['action'];
+		}
+	}
 	
 	/**
-	 * 接收图片
-	 * 
-	 * @return XLoader
+	 * 执行动作
 	 */
-	public function receive()
+	public function run()
+	{
+		switch ($this->_action) {
+			case 'receive' :
+				$this->_receive();
+				break;
+			case 'delete' :
+				$this->_delete();
+				break;
+			default :
+				break;
+		}
+	}
+	
+	/**
+	 * 接收图片并输出
+	 * 
+	 * @return boolean
+	 */
+	private function _receive()
 	{
 		$files = $_FILES[$this->_inputName];
+		$images = array();
 		
 		foreach ($files['name'] as $key => $name) {
 			$nameArr = explode('.', $name);
@@ -66,23 +88,38 @@ class XLoader
 				$image['name'] = $fileName;
 			}
 			
-			$this->_images[] = $image;
+			$images[] = $image;
 		}
 		
-		return $this;
+		if (empty($images)) return false;
+		
+		$json = json_encode($images);
+		echo '<script type="text/javascript">parent.jQuery.XLoaderData(\'' . $json . '\', \'target\')</script>';
+		
+		return true;
 	}
 	
 	/**
-	 * 推送数据到页面，调用页面程序
+	 * 删除图片
+	 * 
+	 * @return boolean
 	 */
-	public function output()
+	private function _delete()
 	{
-		if (empty($this->_images)) return;
+		$filename = isset($_POST['filename']) ? $_POST['filename'] : null;
 		
-		$json = json_encode($this->_images);
-		$output = '<script type="text/javascript">parent.jQuery.XLoaderData(\'' . $json . '\')</script>';
+		if (empty($filename)) {
+			echo json_encode(array('error' => 'yes'));
+			return false;
+		}
 		
-		echo $output;
+		$filenameFull = $this->_savePath . DIRECTORY_SEPARATOR . $filename;
+		if (is_file($filenameFull)) {
+			@unlink($filenameFull);
+		}
+		
+		echo json_encode(array('error' => 'no'));
+		return true;
 	}
 	
 	/**

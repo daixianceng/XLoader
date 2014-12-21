@@ -4,5 +4,4 @@ $xloader = new XLoader();
 $xloader->setInputName('images')
 		->setSavePath(dirname(__FILE__) . '/temp')
 		->setSaveUrl('/demo/temp')
-		->receive()
-		->output();
+		->run();

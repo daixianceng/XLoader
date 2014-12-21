@@ -36,5 +36,6 @@ A simple jQuery multi-image upload plugin.
 * `columnOptions` : 表格列设置，您可以指定哪些列显示，目前支持5列：number, image, name, size, textarea
 * `imageOptions` : 图片属性设置，默认：{}
 * `textareaOptions` : 输入框设置，默认：{name : 'descriptions[]'}
+* `deleteLinkOptions` : 删除链接属性设置，默认：{}
 * `hiddenFieldName` : 图片文件名隐藏域的名称，默认：'imageNames[]'
 * `resourcesUrl` : 资源请求url，如果需要载入已有图片，请设置该参数，默认：''

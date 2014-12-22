@@ -2,7 +2,9 @@
 require_once '../php/XLoaderResources.php';
 
 $images = array(
-	// 'image file name' => 'the description'
+	// 'image file name' => 'the description',
+	// or
+	// 'The image file name'
 );
 
 $xloaderResources = new XLoaderResources();

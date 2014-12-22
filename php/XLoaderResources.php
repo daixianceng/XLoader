@@ -93,7 +93,8 @@ class XLoaderResources
 	 * 
 	 * 参数格式：array(
 	 *           'The image file name' => 'The image description',
-	 *           ...
+	 *           // or
+	 *           'The image file name'
 	 *       )
 	 * 
 	 * @param array $images
@@ -103,7 +104,15 @@ class XLoaderResources
 	{
 		static $imageNames = array();
 		
-		foreach ($images as $name => $description) {
+		foreach ($images as $key => $value) {
+			if (is_numeric($key)) {
+				$name = $value;
+				$description = '';
+			} else {
+				$name = $key;
+				$description = $value;
+			}
+			
 			if (in_array($name, $imageNames)) continue;
 			
 			$fileName = $this->_path . DIRECTORY_SEPARATOR . $name;

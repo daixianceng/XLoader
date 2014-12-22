@@ -32,10 +32,10 @@ A simple jQuery multi-image upload plugin.
 * `target` : 多图片上传目标脚本（必须），图片上传通过此脚本进行
 * `container` : 图片列表容器，默认在图片选择按钮下面展示
 * `registerStyle` : 是否注册自带样式，默认注册
-* `tableOptions` : 表格属性设置，默认：{id : 'XLoaderTable'}
+* `tableOptions` : 表格属性设置，默认：{id:'XLoaderTable'}
 * `columnOptions` : 表格列设置，您可以指定哪些列显示，目前支持5列：number, image, name, size, textarea
 * `imageOptions` : 图片属性设置，默认：{}
 * `textareaOptions` : 输入框设置，默认：{name : 'descriptions[]'}
-* `deleteLinkOptions` : 删除链接属性设置，默认：{}
+* `deleteLinkOptions` : 删除链接属性设置，默认：{text:'Delete', class:'XLoaderDeleteLink'}
 * `hiddenFieldName` : 图片文件名隐藏域的名称，默认：'imageNames[]'
 * `resourcesUrl` : 资源请求url，如果需要载入已有图片，请设置该参数，默认：''

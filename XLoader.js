@@ -45,7 +45,10 @@
 			var textareaOptions = {
 				name : 'descriptions[]'
 			};
-			var deleteLinkOptions = {};
+			var deleteLinkOptions = {
+				text : 'Delete',
+				class : 'XLoaderDeleteLink'
+			};
 			var hiddenFieldName = 'imageNames[]';
 			var resourcesUrl = '';
 			
@@ -103,7 +106,7 @@
 			}
 			
 			if (registerStyle) {
-				$('body').append('<style type="text/css">#XLoaderTable{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;background:#eee;border-spacing:1px}#XLoaderTable .table-col-1{width:100px}#XLoaderTable .table-col-2{width:200px}#XLoaderTable th{font-size:14px;font-weight:200;color:#ddd;background:#333;height:40px}#XLoaderTable img{max-width:180px}#XLoaderTable tr{background:#fff}#XLoaderTable td{text-align:center;padding:10px}#XLoaderTable textarea{resize:none;width:178px;height:100%;padding:5px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;border:1px dashed #ccc;outline:none}#XLoaderTable textarea:hover,#XLoaderTable textarea:focus{border-color:#333}</style>');
+				$('body').append('<style type="text/css">#XLoaderTable{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;background:#eee;border-spacing:1px}#XLoaderTable .table-col-1{width:100px}#XLoaderTable .table-col-2{width:200px}#XLoaderTable th{font-size:14px;font-weight:200;color:#ddd;background:#333;height:40px}#XLoaderTable img{max-width:180px}#XLoaderTable tr{background:#fff}#XLoaderTable td{text-align:center;padding:10px}#XLoaderTable textarea{resize:none;width:178px;height:100%;padding:5px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;border:1px dashed #ccc;outline:none}#XLoaderTable textarea:hover,#XLoaderTable textarea:focus{border-color:#333}.XLoaderDeleteLink{color:#fff;background-color:#d9534f;border-color:#d43f3a;padding:5px 12px;font-weight:bold;line-height:18px;cursor:default;-webkit-background-clip:border-box;background-clip:border-box;border-radius:2px;-webkit-box-shadow:none;box-shadow:none;text-shadow:0 1px rgba(0, 0, 0, .1);display:inline-block;text-decoration:none;}.XLoaderDeleteLink:hover{text-shadow:0 1px rgba(0, 0, 0, .3);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, .2);box-shadow:0 1px 1px rgba(0, 0, 0, .2);border-color:#ac2925;background-color:#c13e2c;}.XLoaderDeletedRow{color:#a94442;background-color:#f2dede;text-shadow:0 1px 0 rgba(255, 255, 255, .5);}</style>');
 			}
 			
 			// The hidden iframe and form.
@@ -191,9 +194,13 @@
 										$tr.append($td);
 										break;
 									case 'modify' :
-										var $td = $('<td><a href="#">Delete</a></td>');
+										var $td = $('<td><a href="#"></a></td>');
 										for (var key in deleteLinkOptions) {
-											$td.find('a').attr(key, deleteLinkOptions[key]);
+											if (key === 'text') {
+												$td.find('a').text(deleteLinkOptions[key]);
+											} else {
+												$td.find('a').attr(key, deleteLinkOptions[key]);
+											}
 										}
 										
 										(function() {
@@ -218,7 +225,7 @@
 													dataType : 'json',
 													success : function(json) {
 														if (json.error === 'no') {
-															$row.remove();
+															$row.empty().html('<td class="XLoaderDeletedRow" colspan="' + Object.keys(columnOptions).length + '">The "' + filename + '" has been deleted.</td>');
 														}
 													},
 													error : function(XMLHttpRequest, textStatus, errorThrown) {

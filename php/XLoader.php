@@ -1,5 +1,7 @@
 <?php
-class XLoader
+require_once 'XLoaderBase.php';
+
+class XLoader extends XLoaderBase
 {
 	/**
 	 * 动作类型
@@ -7,20 +9,6 @@ class XLoader
 	 * @var string
 	 */
 	protected $_action = 'receive';
-	
-	/**
-	 * 图片保存路径
-	 * 
-	 * @var string
-	 */
-	protected $_savePath;
-	
-	/**
-	 * 图片路径URL
-	 * 
-	 * @var string
-	 */
-	protected $_saveUrl;
 	
 	/**
 	 * 图片选择按钮的名称
@@ -36,24 +24,16 @@ class XLoader
 	 */
 	protected $_types = array('jpg', 'png', 'gif', 'bmp');
 	
-	public function __construct()
-	{
-		if (isset($_POST['action'])) {
-			$this->_action = $_POST['action'];
-		}
-	}
-	
 	/**
 	 * 执行动作
 	 */
 	public function run()
 	{
+		parent::run();
+		
 		switch ($this->_action) {
 			case 'receive' :
 				$this->_receive();
-				break;
-			case 'delete' :
-				$this->_delete();
 				break;
 			default :
 				break;
@@ -65,7 +45,7 @@ class XLoader
 	 * 
 	 * @return boolean
 	 */
-	private function _receive()
+	protected function _receive()
 	{
 		$files = $_FILES[$this->_inputName];
 		$images = array();
@@ -83,8 +63,8 @@ class XLoader
 			$image['size'] = self::formatSize($files['size'][$key]);
 			if ($files['error'][$key] === UPLOAD_ERR_OK) {
 				$fileName = self::randomImageName('', $type);
-				move_uploaded_file($files['tmp_name'][$key], $this->_savePath . DIRECTORY_SEPARATOR . $fileName);
-				$image['uri'] = $this->_saveUrl . "/{$fileName}";
+				move_uploaded_file($files['tmp_name'][$key], $this->_path . DIRECTORY_SEPARATOR . $fileName);
+				$image['uri'] = $this->_url . "/{$fileName}";
 				$image['name'] = $fileName;
 			}
 			
@@ -97,79 +77,6 @@ class XLoader
 		echo '<script type="text/javascript">parent.jQuery.XLoaderData(\'' . $json . '\', \'target\')</script>';
 		
 		return true;
-	}
-	
-	/**
-	 * 删除图片
-	 * 
-	 * @return boolean
-	 */
-	private function _delete()
-	{
-		$filename = isset($_POST['filename']) ? $_POST['filename'] : null;
-		
-		if (empty($filename)) {
-			echo json_encode(array('error' => 'yes'));
-			return false;
-		}
-		
-		$filenameFull = $this->_savePath . DIRECTORY_SEPARATOR . $filename;
-		if (is_file($filenameFull)) {
-			@unlink($filenameFull);
-		}
-		
-		echo json_encode(array('error' => 'no'));
-		return true;
-	}
-	
-	/**
-	 * 设置图片保存路径
-	 * 
-	 * 请不要在路径末尾加上路径分隔符"/"或"\"
-	 * 
-	 * @param string $savePath
-	 * @return XLoader
-	 */
-	public function setSavePath($savePath)
-	{
-		$this->_savePath = $savePath;
-		
-		return $this;
-	}
-	
-	/**
-	 * 获取图片保存路径
-	 * 
-	 * @return string
-	 */
-	public function getSavePath()
-	{
-		return $this->_savePath;
-	}
-	
-	/**
-	 * 设置图片保存路径URL
-	 * 
-	 * 请不要在路径末尾加上路径分隔符"/"
-	 * 
-	 * @param string $saveUrl
-	 * @return XLoader
-	 */
-	public function setSaveUrl($saveUrl)
-	{
-		$this->_saveUrl = $saveUrl;
-		
-		return $this;
-	}
-	
-	/**
-	 * 获取图片保存路径URL
-	 * 
-	 * @return string
-	 */
-	public function getSaveUrl()
-	{
-		return $this->_saveUrl;
 	}
 	
 	/**
@@ -249,25 +156,5 @@ class XLoader
 		}
 		
 		return $name;
-	}
-	
-	/**
-	 * 产生一个格式化后的图片大小
-	 * 
-	 * @param int $size
-	 * @return string
-	 */
-	public static function formatSize($size)
-	{
-		$units = explode(' ', 'B KB MB GB TB PB');
-		$mod = 1024;
-	
-		for ($i = 0; $size > $mod; $i++) {
-			$size /= $mod;
-		}
-	
-		$endIndex = strpos($size, ".") + 3;
-	
-		return substr($size, 0, $endIndex) . ' ' . $units[$i];
 	}
 }
